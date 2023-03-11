@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editando al animal: [{{animal.nombre}}]{% endblock %}
+
+{% block body %}
+<form method="post" action="{{ path("app_animales_guardar",{animal: animal.id}) }}">
+  <div class="mb-3">
+    <label for="name" class="form-label">Nombre</label>
+    <input type="text" class="form-control" id="name" name = "name" value="{{animal.nombre}}">
+  </div>
+  <div class="mb-3">
+    <label for="steps" class="form-label">Pasos</label>
+    <input type="number" class="form-control" id="steps" name="steps" value="{{animal.pasos}}">
+  </div>
+  <div class="mb-3">
+    <label for="birthdate" class="form-label">Nacimiento</label>
+    <input type="datetime-local" class="form-control" id="birthdate" name= "birthdate" 
+    value="{{animal.nacimiento|date("Y-m-d H:i")}}">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}
