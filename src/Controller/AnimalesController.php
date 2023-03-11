@@ -9,7 +9,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Animal; 
+use App\Entity\Animal;
+
+use function PHPUnit\Framework\isNull;
+
 class AnimalesController extends AbstractController
 {
     #[Route('/animales', name: 'app_animales')]
@@ -31,18 +34,22 @@ class AnimalesController extends AbstractController
         );
     }
 
-    #[Route('/animales/editar/{animal}', name: 'app_animales_editar')]
-    public function editar(EntityManagerInterface $entityManager, Animal $animal):Response
+    #[Route('/animales/editar/{animal?}', name: 'app_animales_editar')]
+    public function editar(EntityManagerInterface $entityManager, ?Animal $animal=null):Response
     {
         return $this->render('animales/edicion.html.twig', [
             "animal" => $animal
         ]);
     }
 
-    #[Route('/animales/guardar/{animal}', name: 'app_animales_guardar', methods:["POST"])]
-    public function guardar(EntityManagerInterface $entityManager, Request $request, Animal $animal):Response
+    #[Route('/animales/guardar/{animal?}', name: 'app_animales_guardar', methods:["POST"])]
+    public function guardar(EntityManagerInterface $entityManager, Request $request, ?Animal $animal=null):Response
     {
         //$request->request->has
+        if(is_null($animal)){
+            $animal = new Animal();
+        }
+
         $animal->setPasos($request->request->getInt("steps",0));
         $animal->setNombre($request->request->get("name", "Nombre Random"));
         //$animal->setNacimiento($request->request->get("birthdate", ""));
