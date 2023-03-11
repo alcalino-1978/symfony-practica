@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,5 +17,16 @@ class AnimalesController extends AbstractController
         return $this->render('animales/index.html.twig', [
             "animales" => $entityManagerInterface->getRepository(Animal::class)->findAll(),
         ]);
+    }
+
+    #[Route('/animales/borrar/{animal}', name: 'app_animales_borrar')]
+    public function borrar(EntityManagerInterface $entityManager, Animal $animal):Response
+    {
+        $entityManager->remove($animal);
+        $entityManager->flush();
+
+        return new RedirectResponse(
+            $this->generateUrl('app_animales')
+        );
     }
 }

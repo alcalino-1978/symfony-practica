@@ -27,13 +27,13 @@
                 <td>{{animal.pasos|number_format(2,',')}}</td>
                 <td>{{animal.nacimiento|format_datetime('long', 'short', locale='es')}}</td>
                 <td>
-                    <button type="button" class="btn btn-primary mr-4">Detalle</button>
+                    <a href="/animales/editar/{{animal.id}}" type="button" class="btn btn-primary mr-4">Detalle</a>
                     <button type="button" class="btn btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-id="{{ animal.id }}" data-bs-name="{{ animal.nombre }}">Eliminar</button>
                 </td>
             </tr>
         {% else %}
         <tr>
-            <td colspan="5">No users have been found.</td>
+            <td colspan="5">No se han encontrado animalitos.</td>
         </tr>
         {% endfor %}
         </tbody>
