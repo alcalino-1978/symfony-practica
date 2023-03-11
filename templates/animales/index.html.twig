@@ -9,12 +9,31 @@
 </style>
 
 <div class="example-wrapper">
-    <ul class="main-list">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Pasos</th>
+                <th>Nacimiento</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
         {% for animal in animales %}
-        <li>{{ loop.index }} -- {{ animal.nombre }} | {{animal.pasos|number_format(2,',')}} | {{animal.nacimiento|format_datetime('long', 'short', locale='es')}}</li>
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ animal.nombre }}</td>
+                <td>{{animal.pasos|number_format(2,',')}}</td>
+                <td>{{animal.nacimiento|format_datetime('long', 'short', locale='es')}}</td>
+                <td></td>
+            </tr>
         {% else %}
-        No users have been found.
+        <tr>
+            <td colspan="5">No users have been found.</td>
+        </tr>
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
 </div>
 {% endblock %}
