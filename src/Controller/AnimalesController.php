@@ -37,7 +37,7 @@ class AnimalesController extends AbstractController
     }
 
     #[Route('/animales/editar/{animal?}', name: 'app_animales_editar')]
-    public function editar(EntityManagerInterface $entityManager, ?Animal $animal=null):Response
+    public function editar(?Animal $animal=null):Response
     {
         return $this->render('animales/edicion.html.twig', [
             "animal" => $animal
