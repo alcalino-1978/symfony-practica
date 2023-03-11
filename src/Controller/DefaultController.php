@@ -28,7 +28,7 @@ class DefaultController extends AbstractController
             //         "nacimiento"=>"2020-08-24 12:25"
             //     ],
             // ],
-            "animales" => $entityManagerInterface->getRepository(Animal::class)->findAll(),
+            
             "sitios" => $entityManagerInterface->getRepository(Sitios::class)->findAll(),
 
         ]);

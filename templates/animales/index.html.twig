@@ -26,7 +26,10 @@
                 <td>{{ animal.nombre }}</td>
                 <td>{{animal.pasos|number_format(2,',')}}</td>
                 <td>{{animal.nacimiento|format_datetime('long', 'short', locale='es')}}</td>
-                <td></td>
+                <td>
+                    <button type="button" class="btn btn-primary mr-4">Detalle</button>
+                    <button type="button" class="btn btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-id="{{ animal.id }}" data-bs-name="{{ animal.nombre }}">Eliminar</button>
+                </td>
             </tr>
         {% else %}
         <tr>
@@ -36,4 +39,46 @@
         </tbody>
     </table>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Quieres eliminar el animal <strong id="recipient-name"></strong>?</p>
+        </div>
+        <div class="modal-footer">
+          <a id="trigger" href="" type="button" class="btn btn-primary">Eliminar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const exampleModal = document.getElementById('exampleModal')
+        exampleModal.addEventListener('show.bs.modal', event => {
+            // Button that triggered the modal
+            const button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            const recipient = button.getAttribute('data-bs-name');
+            const trigger = document.querySelector('#trigger');
+            const idTrigger = button.getAttribute('data-bs-id');
+            // If necessary, you could initiate an AJAX request here
+            // and then do the updating in a callback.
+            //
+            // Update the modal's content.
+            // const modalTitle = exampleModal.querySelector('.modal-title')
+            const modalBodyInput = exampleModal.querySelector('#recipient-name')
+
+            // modalTitle.textContent = `Eliminar el animal ${recipient}`
+            modalBodyInput.innerHTML = recipient
+            trigger.setAttribute('href', `/animales/borrar/${idTrigger}`);
+        })
+    });
+  </script>
 {% endblock %}
