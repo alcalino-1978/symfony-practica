@@ -28,9 +28,14 @@ class AnimalesController extends AbstractController {
     #[Route('/', name: 'api_v1_animales_list', methods:["GET"])]
     public function list(EntityManagerInterface $entityManagerInterface): JsonResponse
     {
-        return new JsonResponse( 
-            array_map(fn(Animal $animal) => $this->objectInfo($animal),
-            $entityManagerInterface->getRepository(Animal::class)->findAll())
+        return new JsonResponse(
+            // Genera un nuevo array recorriendo el del segundo parámetro y ejecutando el primero
+            array_map( 
+              // Función que se llama por cada registro devuelto
+              fn(Animal $animal) => $this->objectInfo($animal), // Es como un constructor de como se van a mostrar los datos
+              // Obtengo todos los registros de la tabla Animal en este caso concreto
+              $entityManagerInterface->getRepository(Animal::class)->findAll()
+            )
         );
     }
 
@@ -38,7 +43,7 @@ class AnimalesController extends AbstractController {
     public function detalle(Animal $animal): JsonResponse {
 
         return new JsonResponse(
-            $this->objectInfo($animal)
+            $this->objectInfo($animal) // Es como un constructor de como se van a mostrar los datos
         );
     }
 
