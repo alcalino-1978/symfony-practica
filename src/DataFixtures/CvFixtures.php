@@ -20,6 +20,8 @@ class CvFixtures extends Fixture
         $datosPersonales->setLinkedin('https://example.com');
 
         $manager->persist($datosPersonales);
+
+        
         $manager->flush();
     }
 }
