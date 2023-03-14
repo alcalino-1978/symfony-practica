@@ -44,9 +44,10 @@ class Skills
         return $this->soft;
     }
 
-    public function setSoft(string $soft): self
+    public function setSoft(array $soft): self
     {
-        $this->soft = $soft;
+        //Codificamos el array que escribimos en el CVFixture
+        $this->soft = json_encode ($soft);
 
         return $this;
     }
