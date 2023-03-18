@@ -17,7 +17,7 @@ use App\Repository\EducationRepository;
 #[Route('/api/v1/cv')]
 class CvController extends AbstractController
 {
-    #[Route('/', name: 'app_cv_list')]
+    #[Route('', name: 'app_cv_list')]
     public function index(EntityManagerInterface $entityManagerInterface): JsonResponse
     {
         // Busca en la clase Datospersonales el primer resultado que el ID sea 1 y devuelve el objeto completo
@@ -52,16 +52,23 @@ class CvController extends AbstractController
         }
 
         return new JsonResponse(
-            [
-                'nombre' => $datoPersonal[0]->getNombre(),
-                'apellidos' => $datoPersonal[0]->getApellidos(),
-                'telefono' => $datoPersonal[0]->getTelefono(),
-                'email' => $datoPersonal[0]->getEmail(),
-                'linkedin' => $datoPersonal[0]->getLinkedin(),
-                'github' => $datoPersonal[0]->getGithub(),
-                //solicitadfos los datos de educacion y skills guardados en la variable $listaEducacion
-                'educacion' => $listaEducacion,
+            [   
+                'personalInfo'=> [
+                    'name' => $datoPersonal[0]->getNombre().' '.$datoPersonal[0]->getApellidos(),
+                    'phone' => $datoPersonal[0]->getTelefono(),
+                    'charge' => '',
+                    'image' => '',
+                    'mail' => $datoPersonal[0]->getEmail(),
+                    'linkedin' => $datoPersonal[0]->getLinkedin(),
+                    'github' => $datoPersonal[0]->getGithub(),
+                    //solicitadfos los datos de educacion y skills guardados en la variable $listaEducacion
+                    
+                    
+                ],
+                'experience'=> [],
                 'skills' => $listaSkills,
+                'education' => $listaEducacion,
+                'languages'=> [],
             ]
         );
 
