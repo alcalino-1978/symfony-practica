@@ -17,18 +17,18 @@ use App\Repository\EducationRepository;
 #[Route('/api/v1/cv')]
 class CvController extends AbstractController
 {
-    #[Route('', name: 'app_cv_list')]
-    public function index(EntityManagerInterface $entityManagerInterface): JsonResponse
+    #[Route('/{datoPersonal}', name: 'app_cv_list')]
+    public function index(EntityManagerInterface $entityManagerInterface, DatosPersonales $datoPersonal): JsonResponse
     {
         // Busca en la clase Datospersonales el primer resultado que el ID sea 1 y devuelve el objeto completo
-        $datoPersonal = $entityManagerInterface->getRepository(DatosPersonales::class)->findAll();
+        // $datoPersonal = $entityManagerInterface->getRepository(DatosPersonales::class)->findAll();
         //Busca informacion de la entidad Educacion y Skills y lo encuentra con el ID guardado en datosPersonales. Que está vinculado a DatoPersonal
         $educacion = $entityManagerInterface->getRepository(Education::class)->findBy([
-            'datosPersonales'=>$datoPersonal[0]
+            'datosPersonales'=>$datoPersonal
         ]);
 
         $skills = $entityManagerInterface->getRepository(Skills::class)->findBy([
-            'datosPersonales'=>$datoPersonal[0]
+            'datosPersonales'=>$datoPersonal
         ]);
 
         //Variable donde guardamos los estudios y skills
@@ -54,13 +54,13 @@ class CvController extends AbstractController
         return new JsonResponse(
             [   
                 'personalInfo'=> [
-                    'name' => $datoPersonal[0]->getNombre().' '.$datoPersonal[0]->getApellidos(),
-                    'phone' => $datoPersonal[0]->getTelefono(),
+                    'name' => $datoPersonal->getNombre().' '.$datoPersonal->getApellidos(),
+                    'phone' => $datoPersonal->getTelefono(),
                     'charge' => '',
                     'image' => '',
-                    'mail' => $datoPersonal[0]->getEmail(),
-                    'linkedin' => $datoPersonal[0]->getLinkedin(),
-                    'github' => $datoPersonal[0]->getGithub(),
+                    'mail' => $datoPersonal->getEmail(),
+                    'linkedin' => $datoPersonal->getLinkedin(),
+                    'github' => $datoPersonal->getGithub(),
                     //solicitadfos los datos de educacion y skills guardados en la variable $listaEducacion
                     
                     
@@ -73,5 +73,23 @@ class CvController extends AbstractController
         );
 
 
+    }
+
+    #[Route('/{datoPersonal}/email', name: 'app_cv_update_email', methods: ['POST'])]
+    // creamos una función para modificar el valor del email
+    public function changeEmail(EntityManagerInterface $entityManagerInterface, Request $request, DatosPersonales $datoPersonal): JsonResponse // pasamos como segundo parámetro los datos del request
+    {
+        // buscamos por un único valor que en este caso es el id
+        // $datoPersonal = $entityManagerInterface->getRepository(DatosPersonales::class)->findOneBy(['id'=>2]);
+        // Del response transformamos de json a un array
+        $data = json_decode($request->getContent(), true);
+        // seteamos el valor del email con el valor traído del response
+        $datoPersonal->setEmail($data['email']);
+        // avisamos que queremos guardar el dato
+        $entityManagerInterface->persist($datoPersonal);
+        // lo modifica en la bbdd
+        $entityManagerInterface->flush();
+        // devolvemos una respuesta de éxito de actualización del dato
+        return new JsonResponse([], 202);
     }
 }
